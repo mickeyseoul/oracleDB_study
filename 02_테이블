@@ -1,0 +1,42 @@
+▶테이블 생성
+create table members(
+id number primary key, --unique(중복X) + not null(비어있으면X)
+name varchar2(10) not null, --10:글자수(자리) 한글1자:3자리 //크기 반드시 입력
+salary number(15,2) default 1000000, --default 기본값
+birth date default sysdate, --오늘날짜 디폴트
+email varchar2(20)
+);
+
+    SQL> desc members;
+     이름                                      널?      유형
+     ----------------------------------------- -------- ----------------------------
+     ID                                        NOT NULL NUMBER
+     NAME                                               VARCHAR2(10)
+     SALARY                                             NUMBER(15,2)
+     BIRTH                                              DATE
+     EMAIL                                              VARCHAR2(20)
+ 
+ 
+▶insert
+insert into 테이블이름(칼럼1,칼럼2,....) values(값1,값2....);
+
+기본형식
+insert into members(id,name,salary,birth,email)
+values(1,'제시카',100,'90/12/25','aaa@naver.com');
+
+    SQL> insert into members(id,name,salary,birth,email)
+      2  values(1,'제시카',100,'90/12/25','aaa@naver.com');
+    insert into members(id,name,salary,birth,email)
+                *
+    1행에 오류:
+    ORA-01950: 테이블스페이스 'USERS'에 대한 권한이 없습니다.
+
+    SQL> alter user jspid default tablespace users quota unlimited on users; --table에 insert할 권한을 줌***
+
+그외형식
+insert into members --기본컬럼 5개 모두 넣겠다
+values(9,'써니',600,to_date('87/3/4'),'abc@naver.com');  --to_date(' ') 문자열을 날짜로 바꿔줌
+
+insert into members(salary,birth,id,name) --4개만 넣겠다 ->넣지않은 곳은 null 들어감
+values(400,to_date('89/9/1'),8,'윤아');
+
