@@ -51,3 +51,24 @@
 
 >>복사: 커서 드래그 후 엔터
 >>붙여넣기: 복사후 우클릭
+
+
+DML 데이터 조작어 Data Manipulation Language
+select
+insert
+update
+delete
+
+DCL 데이터 제어어
+grant
+
+DLL 데이터 정의어
+create
+alter
+drop
+rename
+
+제약조건 constraint
+primary key
+not null
+unique
