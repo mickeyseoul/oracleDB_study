@@ -32,8 +32,17 @@ values(1,'제시카',100,'90/12/25','aaa@naver.com');
                 *
     1행에 오류:
     ORA-01950: 테이블스페이스 'USERS'에 대한 권한이 없습니다.
-
-    SQL> alter user jspid default tablespace users quota unlimited on users; --table에 insert할 권한을 줌***
+    
+    SQL> conn
+    사용자명 입력: sys
+    비밀번호 입력:
+    연결되었습니다.
+    SQL> alter user jspid default tablespace users quata unlimited on user; --관리자계정으로 jspid에게 table에 insert할 권한을 줌***
+    
+    SQL> conn
+    사용자명 입력: jspid
+    비밀번호 입력:
+    연결되었습니다.
 
 그외형식
 insert into members --기본컬럼 5개 모두 넣겠다
