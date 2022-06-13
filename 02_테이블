@@ -150,10 +150,76 @@ select * from members where email like '%daum%';
 select * from members where birth like '9%';
 
 ▷oder by
+select 칼럼명
+from 테이블명
+[where 조건]
+order by 정렬방식;
 
+정렬방식
+order by 컬럼명1,컬럼명2,... 방식
+order by 컬럼번호1,컬럼번호2,... 방식
+asc:  오름차순 --생략가능
+desc: 내림차순 --cf)desc 테이블명: 구조
+
+asc:  오름차순 --생략가능***
+select * from members order by name asc; --가나다순
+select * from members order by salary asc;
+select * from members order by birth asc; --옛날부터
+select * from members order by email asc; --abc순 null은 맨 뒤에
+
+select * from members order by name asc, salary desc; --먼저 name 오름차순 정렬 후, 이름 같으면 salary 내림차순 정렬
+
+select * from members order by salary, birth;
+select * from members order by 3, 4; --칼럼번호로도 가능
+
+80년대생 중에 급여가 500이하인 레코드를 이름 오름차순으로 조회
+select * from members where birth like '8%' and salary<=500 order by name asc;
 
 
 ▶칼럼 길이 조절하기
 col name for a6
 col email for a14
 col no for 99; --number는 9로 한칸 표현***
+
+
+update 테이블이름
+set 컬럼1=값1, 컬럼2=값2,...
+[where 조건식];
+
+update members
+set name = '윤아'; --모두 윤아로 바뀜
+
+rollback; --마지막 commit으로 되돌리는 것
+
+update members
+set name = '윤아', salary=50
+where id = 3 or id = 5;
+
+id가 7인 레코드의 salary를 200, email 'abc@daum.net'으로 수정
+update members
+set salary=200, email='abc@daum.net'
+where id=7;
+
+모든 레코드의 salary를 50원 인상으로 수정
+update members
+set salary = salary+50;
+
+email이 없는 곳에 xyz@google.com 넣기
+update members
+set email = 'xyz@google.com'
+where email is null; --한번 만들어진 테이블에 값이 없는 경우는 null임
+
+
+▶delete 삭제하기
+delete from 테이블이름
+[where 조건식]
+
+delete from membesr; --table은 그대로고 레코드만 모두 삭제
+delete members; --from 생략가능
+cf)테이블 삭제:drop table이름 cf)계정삭제 drop user 이름 cascade; (cascade딸린 모든것)
+
+id가 5이하인 레코드 삭제
+delete from members
+where id<=5;
+
+
