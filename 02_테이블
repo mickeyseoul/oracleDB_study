@@ -182,6 +182,7 @@ col email for a14
 col no for 99; --number는 9로 한칸 표현***
 
 
+▶update 수정하기
 update 테이블이름
 set 컬럼1=값1, 컬럼2=값2,...
 [where 조건식];
