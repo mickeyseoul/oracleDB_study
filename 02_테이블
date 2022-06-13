@@ -92,14 +92,9 @@ select * from members where email is not null; --이메일이 null이 아닌 레
 select * from members where salary=300;
 select * from members where salary<>300; --salary가 300이 아닌 레코드 조회***
 
-▷컬럼 as
-select id, name from members;
-select id as 번호, name as 이름 from members; --조회 결과 볼때 잠깐 바뀜 --아예 칼럼이 바뀌는 것 아님
-select id as 번호, email as "이메일 주소" from members; --별칭에 공백이 있을 땐 " "로 둘러싸야 함 cf)insert는 ' '*****
-select id 번호, email "이메일 주소" from members; --as 생략가능
 
-▷||
-select name || '의 급여는' || salary || '원 입니다.' from members; -- || 자바의 +와 같음***
+▷|| --자바의 +와 같음
+select name || '의 급여는' || salary || '원 입니다.' from members; -- || 
       SQL> select id || '번의 생일은 ' || birth || '입니다.' from members;
 
       ID||'번의생일은'||BIRTH||'입니다.'
@@ -174,6 +169,13 @@ select * from members order by 3, 4; --칼럼번호로도 가능
 
 80년대생 중에 급여가 500이하인 레코드를 이름 오름차순으로 조회
 select * from members where birth like '8%' and salary<=500 order by name asc;
+
+
+▷컬럼 as
+select id, name from members;
+select id as 번호, name as 이름 from members; --조회 결과 볼때 잠깐 바뀜 --아예 칼럼이 바뀌는 것 아님
+select id as 번호, email as "이메일 주소" from members; --별칭에 공백이 있을 땐 " "로 둘러싸야 함 cf)insert는 ' '*****
+select id 번호, email "이메일 주소" from members; --as 생략가능
 
 
 ▶칼럼 길이 조절하기
