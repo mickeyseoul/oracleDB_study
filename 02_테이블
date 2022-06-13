@@ -51,10 +51,107 @@ select id, name, email, salary, birth from members; --일부 칼럼
 
 ▷where 조건붙이기
 select id,name,salary from members
-where salary<=500 and id>=5; --동시만족
+where salary<=500 and id>=5; --동시만족 and
 
 select id,name,salary from members
-where salary<=500 or id>=5; --둘중 하나만 만족해도
+where salary<=500 or id>=5; --둘중 하나만 만족해도 between
+
+급여가 300~500인 레코드 조회
+select * from members where salary>=300 and salary<=700;
+select * from members where salary between 300 and 700;
+
+생일이 90-1-1이후인 레코드만 조회
+select * from members where birth>='90-1-1';
+
+생일이 90년대인 레코드 조회
+select * from members where birth>='90-1-1' and birth<='99-12-31';
+select * from members where birth between '90-1-1' and '99-12-31'; --
+    [날짜]
+    22/06/13으로 기본적으로 들어감
+    22-6-13으로 입력해도
+
+    1950년을 기준으로
+    49 => 2049
+    51 => 1951 자동으로 붙음
+    
+▷in    
+id가 1 4 7 인 레코드 조회
+select * from members where id=1 or id=3 or id=7; 
+select * from members where id in(1,4,7); --
+
+수영,효연 조회
+select * from members where name='수영' and name='효연';
+select * from members where name in('수영','효연');
+
+▷is null / <>
+select * from members where email=''; --X
+select * from members where email=null; --X
+select * from members where email is null; --이메일이 null인 레코드 조회
+select * from members where email is not null; --이메일이 null이 아닌 레코드 조회
+
+select * from members where salary=300;
+select * from members where salary<>300; --salary가 300이 아닌 레코드 조회***
+
+▷컬럼 as
+select id, name from members;
+select id as 번호, name as 이름 from members; --조회 결과 볼때 잠깐 바뀜 --아예 칼럼이 바뀌는 것 아님
+select id as 번호, email as "이메일 주소" from members; --별칭에 공백이 있을 땐 " "로 둘러싸야 함 cf)insert는 ' '*****
+select id 번호, email "이메일 주소" from members; --as 생략가능
+
+▷||
+select name || '의 급여는' || salary || '원 입니다.' from members; -- || 자바의 +와 같음***
+      SQL> select id || '번의 생일은 ' || birth || '입니다.' from members;
+
+      ID||'번의생일은'||BIRTH||'입니다.'
+      --------------------------------------------------------------------------------
+      1번의 생일은 90/12/25입니다.
+      2번의 생일은 85/12/03입니다.
+      3번의 생일은 78/08/21입니다.
+      4번의 생일은 88/02/21입니다.
+      5번의 생일은 88/02/21입니다.
+      6번의 생일은 93/05/06입니다.
+      7번의 생일은 89/04/12입니다.
+      8번의 생일은 89/09/01입니다.
+      9번의 생일은 87/03/04입니다.
+      10번의 생일은 22/06/10입니다.
+
+      10 행이 선택되었습니다.
+
+▷like % 패턴일치 조회
+_: 1글자
+%: 0~무한대
+
+김_:김정,김밥,김호
+김__:김강회,김혜인 김밥X
+_김_:이김박,윤김정 김밥X,정김X
+
+_니: 써니 X티파니
+__니: 티파니
+
+%은%: 은 최은 은희 곽은정 김세은
+김_%: 김석, 김선호, 김아무개 X김 --김 다음에 한글자 필수
+%니: 니,써니,티파니 X니가
+
+이름이 '니'로 끝나는 레코드 조회
+select * from members where name='%니'; X
+select * from members where name like '%니'; --like***
+
+  SQL> select * from members where name like '%니';
+
+  ID NAME           SALARY BIRTH    EMAIL
+---- ---------- ---------- -------- --------------------
+   2 티파니            700 85/12/03 bbb@naver.com
+   9 써니              600 87/03/04 abc@naver.com
+
+이메일 다음쓰는 사람 조회
+select * from members where email like '%daum%';
+
+생일이 90년대 생인 레코드 조회
+select * from members where birth like '9%';
+
+▷oder by
+
+
 
 ▶칼럼 길이 조절하기
 col name for a6
