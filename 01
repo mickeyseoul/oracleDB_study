@@ -8,3 +8,30 @@
 >>관리자 계정 접속
 사용자명 sys
 비번 oracle as sysdba (써도 안보임)
+
+▶계정생성
+SQL> show user;
+USER은 "SYS"입니다
+
+SQL> alter session set "_oracle_script"=true; --생성계정 쓸때마다 c++ 안 붙여도 되게
+
+세션이 변경되었습니다.
+
+SQL> create user kim identified by 1234 account unlock;
+
+사용자가 생성되었습니다.
+
+SQL> grant connect, resource to kim;
+
+권한이 부여되었습니다.
+
+SQL> grant create table, create sequence to kim;
+
+권한이 부여되었습니다.
+
+SQL> conn
+사용자명 입력: kim
+비밀번호 입력:
+연결되었습니다.
+SQL> show user;
+USER은 "KIM"입니다
