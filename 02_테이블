@@ -171,6 +171,21 @@ select * from members order by 3, 4; --칼럼번호로도 가능
 select * from members where birth like '8%' and salary<=500 order by name asc;
 
 
+▷sequence 시퀀스 설정하기
+drop sequence com_seq; --있었으면 에러 나기에 먼저 지우고 시작
+create sequence com_seq
+increment by 1 --1씩 증가
+start with 1
+minvalue 1 --없으면 무제한
+maxvalue 10;
+
+insert into members
+values(com_seq.nextval,'kim');
+
+insert into members
+values(com_seq.nextval,'park');
+
+
 ▷컬럼 as
 select id, name from members;
 select id as 번호, name as 이름 from members; --조회 결과 볼때 잠깐 바뀜 --아예 칼럼이 바뀌는 것 아님
@@ -192,7 +207,7 @@ set 컬럼1=값1, 컬럼2=값2,...
 update members
 set name = '윤아'; --모두 윤아로 바뀜
 
-rollback; --마지막 commit으로 되돌리는 것
+rollback; --마지막 commit으로 되돌리는 것***
 
 update members
 set name = '윤아', salary=50
