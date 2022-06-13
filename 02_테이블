@@ -1,4 +1,6 @@
 ▶테이블 생성
+create table 테이블이름();
+
 create table members(
 id number primary key, --unique(중복X) + not null(비어있으면X)
 name varchar2(10) not null, --10:글자수(자리) 한글1자:3자리 //크기 반드시 입력
@@ -40,3 +42,21 @@ values(9,'써니',600,to_date('87/3/4'),'abc@naver.com');  --to_date(' ') 문자
 insert into members(salary,birth,id,name) --4개만 넣겠다 ->넣지않은 곳은 null 들어감
 values(400,to_date('89/9/1'),8,'윤아');
 
+
+▶select 가져오기
+select 칼럼1,칼럼2,... from 테이블명;
+
+select id,name,salary from members;
+select id, name, email, salary, birth from members; --일부 칼럼
+
+▷where 조건붙이기
+select id,name,salary from members
+where salary<=500 and id>=5; --동시만족
+
+select id,name,salary from members
+where salary<=500 or id>=5; --둘중 하나만 만족해도
+
+▶칼럼 길이 조절하기
+col name for a6
+col email for a14
+col no for 99; --number는 9로 한칸 표현***
