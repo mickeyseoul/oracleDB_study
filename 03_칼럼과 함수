@@ -7,12 +7,12 @@ alter table members add(gender varchar2(6) default '여자' check(gender='남자
 --default 때문에 작업을 한번만 하면 됨
 -- check 제약조건
 
-SQL> insert into members
-  2  values(11,'태연',600,'88-3-3','ttt@gmail.com','010-2222-3333','어자');
-insert into members
-*
-1행에 오류:
-ORA-02290: 체크 제약조건(JSPID.SYS_C007357)이 위배되었습니다 <<<<<<<<체크제약조건
+    SQL> insert into members
+      2  values(11,'태연',600,'88-3-3','ttt@gmail.com','010-2222-3333','어자');
+    insert into members
+    *
+    1행에 오류:
+    ORA-02290: 체크 제약조건(JSPID.SYS_C007357)이 위배되었습니다 <<<<<<<<체크제약조건
 
 ▷modify 컬럼 타입 수정
 alter table 테이블명 modify(칼럼 타입);
@@ -26,5 +26,29 @@ alter table members rename column hphone to ph;
 ▷delete column 칼럼삭제
 alter table 테이블명 drop column 삭제될컬럼;
 alter table members drop column hphone;
+
+
+▶테이블명 이름 바꾸기
+rename 원래테이블 to 새테이블;
+
+rollback; 안됨
+
+    SQL> select * from tab; --테이블 전체 목록 가져오기
+
+    TNAME      TABTYPE         CLUSTERID
+    ---------- -------------- ----------
+    COMPANY    TABLE
+    MEMBERS    TABLE
+
+
+▶테이블 카피
+create table members2 as --members를 전체 카피
+select * from members;
+
+create table members3 as
+select * from members where id>5;
+
+create table members4 as
+select * from members where gender='여자';
 
 
