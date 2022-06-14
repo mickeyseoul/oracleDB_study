@@ -52,3 +52,303 @@ create table members4 as
 select * from members where gender='여자';
 
 
+
+▶함수(method)
+▷그룹함수
+sum
+avg
+min
+max
+count
+
+sum
+
+    select sum(salary) as 총합 from members;
+
+              총합
+        ----------
+           1005800
+
+    select sum(salary) as "급여 총합계" from members; -- 공백이 있는 곳엔 " "
+
+        급여 총합계
+        -----------
+            1005800
+
+
+avg
+
+    select avg(salary) as "급여 평균" from members;
+
+         급여 평균
+        ----------
+        77369.2308
+
+
+min
+    select min(salary) as "급여 최소값" from members;
+
+max
+    select max(salary) as "급여 최대값" from members;
+
+
+count
+    select count(id) 갯수 from members; --null은 안 셈
+
+          갯수
+    ----------
+            13
+
+    select count(*) 갯수 from members; --count(*) 전부 다 null이더라도 count됨 --보통 레코드 갯수 셀때 사용 ***
+
+
+▶distinct
+select distinct(gender) from members; --중복 제거 <<<<<<<<<<<<<<<<<<<<<<<<<식별자
+
+GENDER
+-------
+여자
+남자    
+
+
+▶dual 테이블
+dual:함수(계산)을 임시로 실행할 때 사용하는 테이블
+
+    SQL> select * from dual;
+
+    DUMMY
+    ----------
+    X
+
+    SQL> select 1+1 from dual;
+
+           1+1
+    ----------
+             2
+
+▷sysdate/systime
+    SQL> select sysdate from dual;
+
+    SYSDATE
+    --------
+    22/06/14 --시/분/초 정보도 들어가 있지만 보이지 않음
+
+
+    SQL> select systimestamp from dual;
+
+    SYSTIMESTAMP
+    ---------------------------------------------------------------------------
+    22/06/14 11:41:37.483000 +09:00
+
+
+▷
+to_date(문자열): 문자열 -> 날짜
+to_char(날짜): 날짜 -> 문자열
+
+    SQL> select to_char(sysdate,'yyyy_mm/dd hh:MI:ss') from dual;
+
+    TO_CHAR(SYSDATE,'YYYY_MM/DDHH:MI:SS')
+    --------------------------------------
+    2022_06/14 11:47:18
+
+    select to_char(sysdate,'yyyy_mm/dd hh:MI:ss') from dual; --MM XXX
+    TO_CHAR(SYSDATE,'YYYY_MM/DDHH:MI:SS')
+    --------------------------------------
+    2022_06/14 11:06:54
+    
+    
+select name, to_char(sysdate,'yyyy') - to_char(birth,'yyyy') as age from members; --나이 뽑아내기
+X select name, to_char(sysdate,'yy') - to_char(birth,'yy') as age from members; --음수가 나옴 -- as 'age'는 임시 칼럼
+
+select name, to_char(sysdate,'yyyy') - to_char(birth,'yyyy') as age from members <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+where to_char(sysdate,'yyyy') - to_char(birth,'yyyy')>=40;
+Xselect name, to_char(sysdate,'yyyy') - to_char(birth,'yyyy') as age from members  
+where age>=40; --age 컬럼은 임시이기 때문에 안됨***
+    
+생일이 6월인 레코드 조회
+select name, to_char(birth,'MM') from members
+where to_char(birth,'MM') = '6';
+
+생일이 6월인 레코드 조회
+select name, to_char(birth,'mm') from members
+where to_char(birth,'mm') = '06';
+
+    SQL> select to_char(sysdate,'d') from dual;
+
+    TO
+    --
+    3
+
+    SQL> select to_char(sysdate,'dy') from dual;
+
+    TO_CHAR(
+    --------
+    화
+
+    SQL> select to_char(sysdate,'day') from dual;
+
+    TO_CHAR(SYSDATE,'DAY')
+    ------------------------
+    화요일
+
+    내 생일 요일
+    select to_char('1993-2-22','day') from dual;
+
+▷mod 나머지 구하기
+    SQL> select mod(13,4) from dual;
+
+    MOD(13,4)
+    ----------
+             1
+
+생일이 짝수월인 레코드 조회
+select name, birth from members
+where mod(to_char(birth, 'MM'),2) = 0;
+    
+
+▷round/ceil/floor
+round 반올림 함수
+소수점 밑 5이상이면 반올림
+
+select round(789.54321), round(0.987), round(0.12345,3) from dual; --네번째 자리까지 보고 세번째 자리까지 출력
+
+ROUND(789.54321) ROUND(0.987) ROUND(0.12345,3)
+---------------- ------------ ----------------
+             790            1             .123
+
+ceil
+select ceil(123.1234)from dual; --뭐라도 있으면 무조건 올리기
+
+CEIL(123.1234)
+--------------
+           124
+
+
+floor
+select floor(123.1234)from dual; --무조건 버리기
+
+
+        SQL> select avg(salary) from members;
+
+        AVG(SALARY)
+        -----------
+         77369.2308
+
+        SQL> select round(avg(salary),2) from members; --급여 평균 소수아래 2자리까지 조회 (3까지 반올림 반영)
+
+        ROUND(AVG(SALARY),2)
+        --------------------
+                    77369.23
+
+
+
+
+
+▶문자열
+
+▷lower/upper
+자바 String tolowerCase() toUppercase()
+
+        SQL> select lower('bANana'), upper('bANaNa') from dual;
+
+        LOWER('BANAN UPPER('BANAN
+        ------------ ------------
+        banana       BANANA
+
+
+update members
+set email = 'ccc@DAum.net' --SQL문장만 대소문자 구분 안하는 것이지 데이터 값은 구분 함***
+where id = 4;
+
+
+select * from members
+where lower(email) like '%daum%'; --찾을 때만 잠시 소문자로 바꿈
+
+select * from members
+where lower(email) like lower('%DAum%');
+
+
+▷length 문자 수/lengthb 바이트 수
+        SQL> select length('카페 라떼'), length('cafe latte'), lengthb('카페 라떼'), lengthb('cafe latte') from dual;
+
+        LENGTH('카페라떼') LENGTH('CAFELATTE') LENGTHB('카페라떼') LENGTHB('CAFELATTE')
+        ------------------ ------------------- ------------------- --------------------
+                         5                  10                  13                   10
+
+
+select * from members
+where name like '___';
+
+select * from members
+where length(name) =3;
+
+
+▶group by
+select distinct depart from members;
+
+        SQL> select depart
+        from members
+        group by depart; 
+
+        DEPART
+        --------------------
+        영업부
+        개발부
+        홍보부
+
+        SQL> select depart, avg(salary)
+        from members
+        group by depart; 
+
+        DEPART               AVG(SALARY)
+        -------------------- -----------
+        영업부                514.285714
+        개발부                       500
+        홍보부                    500100
+
+
+        SQL> select depart, avg(salary) 
+          2  from members;
+        select depart, avg(salary)
+               *
+        1행에 오류:
+        ORA-00937: 단일 그룹의 그룹 함수가 아닙니다 --그룹함수와 일반 컬럼을 같이 조회하는 경우에는 group by로 묶어주어야 함 ***
+
+
+        SQL> select depart, count(*)
+          2  from members
+          3  group by depart;
+
+        DEPART                 COUNT(*)
+        -------------------- ----------
+        영업부                        7
+        개발부                        4
+        홍보부                        2
+
+
+command 순서
+        SQL> select depart, count(depart), avg(salary), max(salary), min(salary)
+          2  from members
+          3  where depart = '개발부'
+          4  group by depart;
+
+        DEPART             COUNT(DEPART) AVG(SALARY) MAX(SALARY) MIN(SALARY)
+        ------------------ ------------- ----------- ----------- -----------
+        개발부                         4         500         600         300
+
+
+        SQL> select depart, count(*), avg(salary), max(salary), min(salary)
+          2  from members
+          3  group by depart
+          4  order by depart asc;
+
+        DEPART                 COUNT(*) AVG(SALARY) MAX(SALARY) MIN(SALARY)
+        -------------------- ---------- ----------- ----------- -----------
+        개발부                        4         500         600         300
+        영업부                        7  514.285714         800         100
+        홍보부                        2      500100     1000000         200
+        
+        
+        
+        
+        
