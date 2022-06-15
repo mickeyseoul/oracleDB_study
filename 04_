@@ -1,7 +1,268 @@
+▶group by
+일반 컬럼1, 그룹함수1, 그룹함수2 ...
+group by 일반컬럼1;
+
+일반 컬럼1, 일반컬럼2, 그룹함수1, 그룹함수2 ...
+group by 일반컬럼1, 일반컬럼;
+
+조건문
+where
+having --조건문 일반컬럼/ 함수
+
+        SQL> select gender, depart, count(*) 인원수 --일반 컬럼 2개
+          2  from members
+          3  group by gender;
+        select gender, depart, count(*) 인원수
+                       *
+        1행에 오류:
+        ORA-00979: GROUP BY 표현식이 아닙니다. -- !
+
+        SQL> select gender, depart, count(*) 인원수 --일반 컬럼 2개
+          2  from members
+          3  group by gender, depart;
+
+
+부서별 급여가 500이상인 레코드/ 급여 평균조회
+        SQL> select depart, avg(salary) from members
+          2  where salary >= 500
+          3  group by depart;
+
+급여가 500이상인 레코드를 대상으로/ 급여 평균이 2100이상인 레코드 부서별 조회  --<having
+        SLQ> select depart, avg(salary) from members
+        where salary >= 500
+        group by depart
+        having avg(salary) >= 2000;
+        
+급여가 500이상인 레코드를 대상으로/ 부서별 급여 평균이 2100이상인 레코드를/ 부서 오름차순으로 조회
+        SLQ> select depart, avg(salary) from members
+        where salary >= 500
+        group by depart
+        having avg(salary) >= 2000
+        order by depart asc;
+
+
+▶join 조인
+두 테이블을 하나로 합쳐
+양쪽 테이블에 일치하는 것들을 가지고 오는 교집합
+
+조건문
+X where
+on
+
+        SQL> select * from producer;
+
+        P_CODE               P_NAME                  P_PRICE
+        -------------------- -------------------- ----------
+        A01                  운동화                     1000
+        A02                  원피스                     2000
+        A05                  가방                       4000
+        A03                  바지                       3000
+
+        SQL> select * from consumer;
+
+        C_CODE               C_NAME                  C_PRICE C_ADDR
+        -------------------- -------------------- ---------- --------------------
+        A01                  전지현                     1100 서울
+        A02                  김수현                     2100 부산
+        A04                  태연                       3100 제주
+        A03                  아이유                     3100 제주
+
+select p_code, p_name, c_name, c_addr
+from producer, consumer
+where p_code = c_code;
+
+
+alter table producer rename column p_code to code;
+alter table consumer rename column c_code to code;
+
+        SQL> select code, p_name, c_name, c_addr --code가 어디의 code인지 알 수 없음
+          2  from producer, consumer
+          3  where code = code;
+        where code = code
+                     *
+        3행에 오류:
+        ORA-00918: 열의 정의가 애매합니다
+        
+select pro.code, p_name, c_name, c_addr
+from producer pro, consumer con               --테이블 별칭 설정 as 절대 안됨***
+where pro.code = con.code;
+▷inner join        
+select pro.code, p_name, c_name, c_addr
+from producer pro inner join consumer con     --inner join 교집합 조인
+on pro.code = con.code;                       --on Xwhere
+
+▷outer join 합집합 조인
+select pro.code, p_name, c_name, c_addr
+from producer pro left outer join consumer con --outer join 합집합 조인 // left테이블만 갖고 있는 것도 출력됨
+on pro.code = con.code;
+
+select pro.code, p_name, c_name, c_addr
+from producer pro right outer join consumer con --right 테이블만 갖고 있는 것도 나옴
+on pro.code = con.code;
+
+▷full join
+select pro.code, p_name, c_name, c_addr
+from producer pro full outer join consumer con --일치하지 않는 것도 양쪽 나옴
+on pro.code = con.code;        
+
+▷natural join --양쪽 테이블에 공통되는 모든 컬럼을 조건으로 교집합 조인 --on X***
+select code, p_name, c_name, c_price
+from producer natural join consumer;
+
+결과물을 임시테이블로 저장
+drop table imsi;
+create table imsi as
+select pro.code 공급코드, p_name 상품, c_name 구매자이름, c_price "소비자 가격"
+from producer pro, consumer con
+where pro.code = con.code;
+        
+▷self join 자기와 자기를 비교                                                                   <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ???
+         EMPNO ENAME                POSITION                    MGR     DEPTNO
+        ---------- -------------------- -------------------- ---------- ----------
+              1111 태연                 사원                       1122         10
+              1112 수영                 대리                       1123         20
+              1113 서현                 과장                       1121         30
+              1114 효연                 대리                       1121         10
+              1115 유리                 사원                       1122         30
+              1116 써니                 과장                       1123         20
+              1121 효린                 부장                       1123
+              1122 보라                 이사
+              1123 다솜                 사장
+      
+select a.ename 사원명, b.ename 매니저명
+from emp a, emp b
+where a.mgr = b.empno;
+
+        사원명               매니저명
+        -------------------- --------------------
+        서현                 효린
+        효연                 효린
+        태연                 보라
+        유리                 보라
+        수영                 다솜
+        써니                 다솜
+        효린                 다솜
 
 
 
+▶특수 컬럼(pseudo 컬럼)
+	rownum
+		테이블에 레코드가 들어간 순서를 기억하고 있는 특수 컬럼  <<<< new 1 행 insert시 2 행 삭제시***
+		시스템은 이것을 토대로 들어온 순서를 관리한다.
+	rowid
+		행을 구분하기 위한 고유 문자열(unique)
+		DB 전체에서 유일 무이하다.(인덱스에 사용)
 
+        SQL> select rownum, name, jumsu      --rownum 컬럼 추가 하지 않아도 생성되어있음(입력시 순서로 기준)
+          2  from rowtest;
+
+            ROWNUM NAME                      JUMSU
+        ---------- -------------------- ----------
+                 1 소녀시대                     30
+                 2 원더걸스                     20
+                 3 블랙핑크                     50
+                 4 애프터스쿨                   80
+                 5 비스트                       70
+                 6 레드벨벳                     10
+                 7 티아라                       40
+                 8 EXO                          60
+
+
+        SQL> select rownum, name, jumsu
+          2  from rowtest
+          3  order by jumsu desc;               --정렬시 변하지 않음
+
+            ROWNUM NAME                      JUMSU
+        ---------- -------------------- ----------
+                 4 애프터스쿨                   80
+                 5 비스트                       70
+                 8 EXO                          60
+                 3 블랙핑크                     50
+                 7 티아라                       40
+                 1 소녀시대                     30
+                 2 원더걸스                     20
+                 6 레드벨벳                     10
+
+
+        SQL>delete from rowtest                 --행 삭제 후에는 변함 => 기준 new
+          2  from rowtest;
+          3  where name = '소녀시대';
+
+            ROWNUM NAME                      JUMSU
+        ---------- -------------------- ----------
+                 1 원더걸스                     20   
+                 2 블랙핑크                     50
+                 3 애프터스쿨                   80
+                 4 비스트                       70
+                 5 레드벨벳                     10
+                 6 티아라                       40
+                 7 EXO                          60
+
+
+        SQL> select rownum, name, jumsu   
+          2  from rowtest
+          3  where jumsu>=30 and jumsu<=70;      --조건식으로 뽑을 땐 변함 //순간적
+
+            ROWNUM NAME                      JUMSU
+        ---------- -------------------- ----------
+                 1 블랙핑크                     50
+                 2 비스트                       70
+                 3 티아라                       40
+                 4 EXO                          60
+
+
+▷▷Inline View(Top N 절)
+정의: from 절에 select 구문이 나온다.
+
+문제점 중복 점수 인식 못하고 윗줄에 있는 것만 보고 가져옴***
+1)점수를 내림차순 정렬
+        SQL> select rownum, name, jumsu 
+        from rowtest
+        order by jumsu desc;
+
+            ROWNUM NAME                      JUMSU
+        ---------- -------------------- ----------
+                 3 애프터스쿨                   80
+                 4 비스트                       70
+                 7 EXO                          60
+                 2 블랙핑크                     60
+                 6 티아라                       40
+                 1 원더걸스                     20
+                 5 레드벨벳                     10
+
+
+2)
+        SQL> select rownum as rank, name, jumsu --1번을 하나의 테이블로 보고 새로운 rownum 설정 => 두번째 rownum new***
+          2  from (select rownum, name, jumsu
+          3  from rowtest
+          4  order by jumsu desc);
+
+              RANK NAME                      JUMSU 
+        ---------- -------------------- ----------
+                 1 애프터스쿨                   80
+                 2 비스트                       70
+                 3 EXO                          60
+                 4 블랙핑크                     50
+                 5 티아라                       40
+                 6 원더걸스                     20
+                 7 레드벨벳                     10
+
+3)
+        SQL> select rank, name, jumsu
+          2  from (select rownum as rank, name, jumsu
+          3  from (select rownum, name, jumsu
+          4  from rowtest
+          5  order by jumsu desc))  
+          6  where rank<=3; --조건 설정해서 123등 뽑아내기 //순간적
+
+              RANK NAME                      JUMSU
+        ---------- -------------------- ----------
+                 1 애프터스쿨                   80
+                 2 비스트                       70
+                 3 EXO                          60
+
+문제점 중복 점수 인식 못하고 윗줄에 있는 것만 보고 가져옴***
+=> dense_rank() 사용
 
 
 ▶dense_rank()/rank()   --순위 매길때 dense_rank() 주로 사용
