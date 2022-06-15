@@ -195,7 +195,7 @@ insert into members
 values(com_seq.nextval,'park');
 
 
-▷컬럼 as
+▷컬럼 as : 별칭 생략가능
 select id, name from members;
 select id as 번호, name as 이름 from members; --조회 결과 볼때 잠깐 바뀜 --아예 칼럼이 바뀌는 것 아님
 select id as 번호, email as "이메일 주소" from members; --별칭에 공백이 있을 땐 " "로 둘러싸야 함 cf)insert는 ' '*****
