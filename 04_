@@ -1,0 +1,61 @@
+
+
+
+
+
+
+▶dense_rank()/rank()   --순위 매길때 dense_rank() 주로 사용
+▷dense_rank()
+select  rownum, name, jumsu, dense_rank() over(order by jumsu desc) rank
+from rowtest;
+
+        ROWNUM NAME                      JUMSU       RANK
+    ---------- -------------------- ---------- ----------
+             3 애프터스쿨                   80          1
+             4 비스트                       70          2
+             7 EXO                          60          3
+             2 블랙핑크                     60          3
+             6 티아라                       40          4
+             1 원더걸스                     20          5
+             5 레드벨벳                     10          6
+
+
+select name, jumsu, rank
+from (select  rownum, name, jumsu, dense_rank() over(order by jumsu desc) rank <<<<<<<<<3등 두명 4등 있음
+from rowtest)
+where rank between 2 and 4;
+
+    NAME                      JUMSU       RANK
+    -------------------- ---------- ----------
+    비스트                       70          2
+    블랙핑크                     60          3
+    EXO                          60          3
+    티아라                       40          4
+
+
+▷rank()
+select  rownum, name, jumsu, rank() over(order by jumsu desc) rank <<<<<<<<<<3등 두명 4등 없음
+from rowtest;
+
+        ROWNUM NAME                      JUMSU       RANK
+    ---------- -------------------- ---------- ----------
+             3 애프터스쿨                   80          1
+             4 비스트                       70          2
+             7 EXO                          60          3
+             2 블랙핑크                     60          3
+             6 티아라                       40          5
+             1 원더걸스                     20          6
+             5 레드벨벳                     10          7
+
+select name, jumsu, rank
+from (select  rownum, name, jumsu, rank() over(order by jumsu desc) rank
+from rowtest)
+where rank between 2 and 4;
+
+    NAME                      JUMSU       RANK
+    -------------------- ---------- ----------
+    비스트                       70          2
+    블랙핑크                     60          3
+    EXO                          60          3
+
+
