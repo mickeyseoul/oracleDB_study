@@ -1,0 +1,117 @@
+>>자식테이블
+drop table book2;
+
+create table book2(
+ no number primary key,
+ title varchar2(30) not null,
+ author varchar2(20) not null,
+ publisher varchar2(20),
+ day date default sysdate,
+ sell_no number references seller(sell_no) --자식키(외래키) --부모 레퍼런스 참고
+);
+
+insert into book2
+values(1,'백설공주','수지','문학동네','90/01/02',100);
+
+insert into book2
+values(2,'어린왕자','태연','창작과 비평','93/11/02',300);
+
+insert into book2
+values(3,'신데렐라','하니','문학동네','82/01/24',200);
+
+insert into book2
+values(4,'콩쥐팥쥐','보라','문학과 지성','99/05/02',200);
+
+insert into book2
+values(5,'선녀와 나무꾼','아이유','창작과 비평','16/03/04',100);
+
+insert into book2
+values(6,'흥부와 놀부','민아','문학동네','16/03/04',300);
+
+insert into book2
+values(7,'피터팬','웬디','문학동네','16/03/04',500); --부모 참고했을 때 없는 숫자
+
+    SQL> insert into book2
+     2  values(7,'피터팬','웬디','문학동네','16/03/04',500);
+    insert into book2
+    *
+    1행에 오류:
+    ORA-02291: 무결성 제약조건(JSPID.SYS_C007377)이 위배되었습니다- 부모 키가
+    없습니다
+
+commit;
+
+
+>>부모테이블
+
+       SELL_NO PLACE
+    ---------- ----------------------------------------
+           100 교보
+           200 영풍
+           400 인터파크
+           300 yes24
+
+drop table seller ;
+create table seller(
+sell_no number primary key, --부모키 설정
+place varchar2(20) not null
+);
+
+insert into seller values(100,'교보');
+insert into seller values(200,'영풍');
+insert into seller values(300,'yes24');
+insert into seller values(400,'인터파크');
+
+commit;
+select * from book2;
+select * from seller ;
+
+
+1 부모테이블 삭제
+
+      SQL> drop table seller;
+      drop table seller
+                *
+      1행에 오류:
+      ORA-02449: 외래 키에 의해 참조되는 고유/기본 키가 테이블에 있습니다
+
+부모테이블>>
+drop table seller cascade constraints; --자식이 참고하는 부모테이블 삭제 가능케
+create table seller(
+sell_no number primary key ,
+place varchar2(20) not null
+);
+
+insert into seller values(100,'교보');
+insert into seller values(200,'영풍');
+insert into seller values(300,'yes24');
+insert into seller values(400,'인터파크');
+
+
+2 부모테이블 열(자식이 참고하는) 삭제
+   cf)부모키 중에 자식이 참조 안하는 데이터는 삭제 가능
+
+      SQL> delete from seller
+       2  where sell_no = 300; --부모테이블에서 자식테이블이 참고하는 열 삭제 안됨
+      delete from seller
+      *
+      1행에 오류:
+      ORA-02292: 무결성 제약조건(JSPID.SYS_C007391)이 위배되었습니다- 자식 레코드가
+      발견되었습니다
+
+on delete set null  : 부모가 지워지면 자식자리는 null로 채워라 ◁
+on delete cascade : 부모가 지워지면 자식 레코드도 삭제됨 ◁
+	
+>>자식테이블
+drop table book2;
+
+create table book2(
+ no number primary key,
+ title varchar2(30) not null,
+ author varchar2(20) not null,
+ publisher varchar2(20),
+ day date default sysdate,
+ sell_no number references seller(sell_no) on delete set null --부모 레퍼런스 삭제시 null로 입력됨
+);
+
+
