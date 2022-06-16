@@ -1,7 +1,7 @@
+▶외래키(자식키)
 >>자식테이블
 drop table book2;
-
-create table book2(
+create table book2( --자식테이블
  no number primary key,
  title varchar2(30) not null,
  author varchar2(20) not null,
@@ -52,8 +52,8 @@ commit;
            300 yes24
 
 drop table seller ;
-create table seller(
-sell_no number primary key, --부모키 설정
+create table seller( --부모테이블
+sell_no number primary key, --부모키 설정 primary(기본키)/unique(고유키) 필수
 place varchar2(20) not null
 );
 
