@@ -53,23 +53,23 @@
 >>붙여넣기: 복사후 우클릭
 
 ▶
-DLL 데이터 정의어 --auto commit됨
+DDL 데이터 정의어 Data Definition Language --auto commit됨
 create
 alter
 rename
 drop
 
-DML 데이터 조작어 Data Manipulation Language
+DML 데이터 조작어 Data Manipulation Language --commit 필수 rollback 가능
 select
 insert
 update
 delete
 
-DCL 데이터 제어어
+DCL 데이터 제어어 Data Control Language
 grant
 
 ▶
-제약조건
+제약조건 constraint
 primaru key
 not null
 unique
