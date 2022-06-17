@@ -227,8 +227,27 @@ begin
 	end loop;
 end;
 /
--------------------------------------------------------------------------------------------------
 
+3)
+가장 큰 no값 가져오기
++1 인서트 세번  반복 for loop
+
+declare
+vmax number;
+
+begin
+select max(no) 
+into vmax
+from customer;
+
+for i in 1..3 loop
+insert into customer
+values(vmax+i,'choi','aa');
+end loop;
+
+end;
+/
+-------------------------------------------------------------------------------------------------
 ▶테이블 데이터타입을 모를때
 
 1)%type
