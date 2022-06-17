@@ -1,0 +1,102 @@
+▶제어문
+▷case
+case(변수명)
+  when ~ then:
+  when ~ then:
+  else: -- 생략가능
+end case;
+
+자바
+switch(조건식){
+ case 1: 출력문1;
+ case 2: 출력문2;
+ default: 출력문3; //생략가능
+}
+
+제어문 if, switch
+반복문 for, while
+
+1)
+declare
+	vdeptno number := '&dept';
+	vdept varchar2(20);
+begin
+	case(vdeptno)
+ 	when 10 then vdept:= '총무부';
+ 	when 20 then vdept:='개발부';
+ 	when 30 then vdept:='영어부';
+ 	else vdept:='잘못입력함';
+ 	end case;
+
+	dbms_output.put_line('vdept:'||vdept);
+end;
+/
+
+2)
+declare
+	vdeptno number := '&deptno';
+	vdept varchar2(20);
+begin
+	vdept:= --
+	case(vdeptno)
+ 	when 10 then '총무부' --
+ 	when 20 then '개발부'
+ 	when 30 then '영어부'
+ 	else '잘못입력함'
+ 	end; --
+
+	dbms_output.put_line('vdept:'||vdept);
+end;
+/
+
+3) if문 / case문 비교
+declare
+vid number := '&id';
+vsalary number;
+result number;
+
+begin
+select id, salary
+into vid, vsalary
+from members
+where id = vid; --없다면 실제 인출은 요구된 것보다 많은 수의 행을 추출합니다
+
+if vsalary>1000 then
+result:='높음';
+elsif vsalary vsalary>500 then                  --elsif는 윗줄 if 조건 배제 후 고려 != if***
+result:='보통';
+else
+result:='낮음';
+end if;
+
+dbms_output.put_line('resutl: '||result);
+
+end;
+/
+
+declare
+vid number := '&id';
+vsalary number;
+result varchar2(10);
+
+begin
+select id, salary
+into vid, vsalary
+from members
+where id = vid; 
+
+case --
+when vsalary>1000 then result:='높음'; --자바와 다른 점 자바는 수식 못씀
+when between 500 and 999 then result:='보통';                            -- X vsalary>500***
+else result:='낮음'; --=when vsalary < 500 then result := '낮음';
+end case;
+
+dbms_output.put_line('resutl: '||result);
+
+end;
+/
+
+
+
+
+
