@@ -95,8 +95,176 @@ dbms_output.put_line('resutl: '||result);
 
 end;
 /
+------------------------------------------------------------------------------------------------
+
+▶반복문
+▷loop 
+--exit when...
+
+1)
+declare
+	i number := 1;
+	vsum number := 0; -- X sum 예약어는 변수로 못씀
+begin
+	i:=1;
+	loop
+		dbms_output.put_line('i: ' || i);
+		vsum := vsum + i;
+		exit when i = 10; 	--충족되면 바로 빠져나감
+		i := i + 1;
+	end loop;
+
+	dbms_output.put_line('loop 빠져나옴');
+	dbms_output.put_line('vsum: ' || vsum);
+end;
+/
+
+
+2)for in loop 	--exit when 생략가능
+for i in 반복대상 loop
+for(i=0;i<=10;i++)
+
+declare
+	--i number := 1;
+	vsum number := 0; 
+begin
+	for i in 1..10 loop --무조건 1씩 밖에 증가 안됨 --for in loop에 사용되는 변수는 선언 안해도 됨
+		dbms_output.put_line('i:' || i);
+		--exit when i = 5; 가능함
+		vsum := vsum + i;
+	end loop;
+	dbms_output.put_line('vsum: ' || vsum);
+end;
 
 
 
+3)for loop reverse
+declare
+	i number := 1;
+begin
+	for i in reverse 1..10 loop --
+		dbms_output.put_line('i:' || i);
+		
+	end loop;
+	
+end;
+/
 
+4)while loop
+
+declare
+	i number := 1;
+	vsum number := 0; -- X sum 예약어는 변수로 못씀
+begin
+	i:=1;
+	while i<=10 loop --충족되지 않으면 빠져나감
+		dbms_output.put_line('i: ' || i);
+		vsum := vsum + i;
+		i := i + 1;
+	end loop;
+
+	dbms_output.put_line('loop 빠져나옴');
+	dbms_output.put_line('vsum: ' || vsum);
+end;
+/
+
+5)while true loop
+
+declare
+	i number := 1;
+	vsum number := 0; -- X sum 예약어는 변수로 못씀
+begin
+	i:=1;
+	while true loop --충족되지 않으면 빠져나감
+		dbms_output.put_line('i: ' || i);
+		vsum := vsum + i;
+		exit when i = 10; --
+		i := i + 1;
+	end loop;
+
+	dbms_output.put_line('loop 빠져나옴');
+	dbms_output.put_line('vsum: ' || vsum);
+end;
+/
+----------------------------------------------------------------------------------------------
+▶제어문/반복문 연습문제
+1)
+1~100의 수중 -- 숫자가 정해져 있을땐 for in loop
+5의 배수이면서 7의 배수인 수 출력
+
+--declare
+
+begin
+	for i in 1..100 loop
+		if mod(i,5)=0 and mod(i,7)=0 then
+			dbms_output.put_line(i);
+		end if;				
+	end loop;
+end;
+
+2)
+구구단 출력
+declare
+	x number := '&x';
+	y number := 0 ;
+
+begin
+	loop
+		y := y +1;
+		dbms_output.put_line(x||'*'||y||'='||x*y);
+		exit when y = 9;
+	end loop;
+end;
+/
+
+declare
+	x number := '&x';
+	y number ;
+
+begin
+	for y in 1..9 loop 	--for in loop에 사용되는 변수는 선언 안해도 됨
+		dbms_output.put_line(x||'*'||y||'='||x*y);
+	end loop;
+end;
+/
+-------------------------------------------------------------------------------------------------
+
+▶테이블 데이터타입을 모를때
+
+1)%type
+
+declare
+vid members.id%type;
+vname members.name%type;
+vsalary members.salary%type;
+
+begin
+select id, name, salary
+into vid, vname, vsalary
+from members
+where id = 3; 
+
+dbms_output.put_line(vid||','||vname||','||vsalary);
+
+end;
+/
+
+2)%rowtype
+
+declare
+vmember members%rowtype; --한줄(한레코드)
+
+begin
+select *
+into vmember
+from members
+where id = 3; 
+
+dbms_output.put_line(vmember.id||','||vmember.name||','||vmember.gender); 
+--필요한 것만 하나씩 하나씩 꺼내 쓸 수 있음
+--dbms_output.put_line(vmember); X
+
+end;
+/
+-----------------------------------------------------------------------------------------------
 
