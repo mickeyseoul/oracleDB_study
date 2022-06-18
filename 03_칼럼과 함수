@@ -50,11 +50,11 @@ select * from members where id>5;
 
 create table members4 as
 select * from members where gender='여자';
-
-
+----------------------------------------------------------------------------------------------------------------
 
 ▶함수(method)
 ▷그룹함수
+:하나 이상의 행을 그룹으로 묶어 연산하여 총합(sum), 평균(avg) 등 하나의 결과로 나타냄
 sum
 avg
 min
