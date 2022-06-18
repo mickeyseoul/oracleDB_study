@@ -70,7 +70,7 @@ grant
 
 ▶
 제약조건 constraint
-primaru key
+primary key
 not null
 unique
 check 		check(gender in('남자','여자') 남자 여자만 인서트 가능
