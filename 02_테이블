@@ -1,4 +1,4 @@
-▶테이블 생성
+▶create 테이블 생성
 create table 테이블이름();
 
 create table members(
@@ -52,8 +52,10 @@ insert into members(salary,birth,id,name) --4개만 넣겠다 ->넣지않은 곳
 values(400,to_date('89/9/1'),8,'윤아');
 
 
-▶select 가져오기
+▶select 조회
 select 칼럼1,칼럼2,... from 테이블명;
+
+select * from members; --* All
 
 select id,name,salary from members;
 select id, name, email, salary, birth from members; --일부 칼럼
@@ -63,18 +65,19 @@ select id,name,salary from members
 where salary<=500 and id>=5; --동시만족 and
 
 select id,name,salary from members
-where salary<=500 or id>=5; --둘중 하나만 만족해도 between
+where salary<=500 or id>=5; --둘중 하나만 만족해도 or
 
 급여가 300~500인 레코드 조회
 select * from members where salary>=300 and salary<=700;
-select * from members where salary between 300 and 700;
+select * from members where salary between 300 and 700; --between and
 
 생일이 90-1-1이후인 레코드만 조회
 select * from members where birth>='90-1-1';
 
 생일이 90년대인 레코드 조회
 select * from members where birth>='90-1-1' and birth<='99-12-31';
-select * from members where birth between '90-1-1' and '99-12-31'; --
+select * from members where birth between '90-1-1' and '99-12-31'; 
+
     [날짜]
     22/06/13으로 기본적으로 들어감
     22-6-13으로 입력해도
@@ -101,10 +104,8 @@ select * from members where email is not null; --이메일이 null이 아닌 레
 select * from members where salary=300;
 select * from members where salary<>300; --salary가 300이 아닌 레코드 조회***
 
-
 ▷|| --자바의 +와 같음
-select name || '의 급여는' || salary || '원 입니다.' from members; -- || 
-      SQL> select id || '번의 생일은 ' || birth || '입니다.' from members;
+select id || '번의 생일은 ' || birth || '입니다.' from members;
 
       ID||'번의생일은'||BIRTH||'입니다.'
       --------------------------------------------------------------------------------
@@ -126,15 +127,15 @@ _: 1글자
 %: 0~무한대
 
 김_:김정,김밥,김호
-김__:김강회,김혜인 김밥X
-_김_:이김박,윤김정 김밥X,정김X
+김__:김강회,김혜인 X김밥
+_김_:이김박,윤김정 X김밥 X정김
 
 _니: 써니 X티파니
 __니: 티파니
 
-%은%: 은 최은 은희 곽은정 김세은
-김_%: 김석, 김선호, 김아무개 X김 --김 다음에 한글자 필수
-%니: 니,써니,티파니 X니가
+%은%: 은,최은,은희,곽은정,김세은
+김_%: 김석,김선호,김아무개 X김 --김 다음에 한글자 필수
+%니: 니,써니,티파니 X니은
 
 이름이 '니'로 끝나는 레코드 조회
 select * from members where name='%니'; X
@@ -162,6 +163,7 @@ order by 정렬방식;
 정렬방식
 order by 컬럼명1,컬럼명2,... 방식
 order by 컬럼번호1,컬럼번호2,... 방식
+
 asc:  오름차순 --생략가능
 desc: 내림차순 --cf)desc 테이블명: 구조
 
@@ -180,7 +182,7 @@ select * from members order by 3, 4; --칼럼번호로도 가능
 select * from members where birth like '8%' and salary<=500 order by name asc;
 
 
-▷sequence 시퀀스 설정하기
+▶sequence 시퀀스 설정하기
 drop sequence com_seq; --있었으면 에러 나기에 먼저 지우고 시작
 create sequence com_seq
 increment by 1 --1씩 증가
@@ -195,7 +197,7 @@ insert into members
 values(com_seq.nextval,'park');
 
 
-▷컬럼 as : 별칭 생략가능
+▶컬럼 as : 별칭 생략가능
 select id, name from members;
 select id as 번호, name as 이름 from members; --조회 결과 볼때 잠깐 바뀜 --아예 칼럼이 바뀌는 것 아님
 select id as 번호, email as "이메일 주소" from members; --별칭에 공백이 있을 땐 " "로 둘러싸야 함 cf)insert는 ' '*****
@@ -207,7 +209,7 @@ col name for a6
 col email for a14
 col no for 99; --number는 9로 한칸 표현***
 
-
+------------------------------------------------------------------------------------------------------------------
 ▶update 수정하기
 update 테이블이름
 set 컬럼1=값1, 컬럼2=값2,...
@@ -235,7 +237,7 @@ email이 없는 곳에 xyz@google.com 넣기
 update members
 set email = 'xyz@google.com'
 where email is null; --한번 만들어진 테이블에 값이 없는 경우는 null임
-
+-----------------------------------------------------------------------------------------------------------------
 
 ▶delete 삭제하기
 delete from 테이블이름
