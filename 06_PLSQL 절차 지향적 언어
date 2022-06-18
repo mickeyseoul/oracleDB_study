@@ -35,6 +35,7 @@ end;
 /
 
 ▷select into : 결과가 레코드 한줄만 나올 때 사용 가능***
+1)
 declare
 	vname varchar2(12); --가져올 테이블의 데이터의 기존 컬럼타입과 똑같아야 함 (크기는 안똑같아도 됨)
 	vposition varchar2(10);
@@ -62,6 +63,7 @@ begin
 end;
 /
 
+2)select into 레코드 여러줄 일때 (조건)로 한 줄 특정
 members의 부서별 급여 평균 구하기
 
 select depart, avg(salary)
@@ -180,7 +182,6 @@ Begin
 End;
 /
 -------------------------------------------------------------------------------------------
-
 ▶if문 사용하기
 
 if 조건 then
@@ -190,13 +191,13 @@ end if;
 
 if 조건 then
  처리할 문장1;
-elsif 조건2 then --else if
+elsif 조건2 then 	--else if
  처리할 문장2;
 else
  처리할 문장3
 end if;
 
-
+1)
 declare
 	x number := 2;
 	result varchar2(15);
@@ -232,8 +233,8 @@ begin
 	dbms_output.put_line('result:' || result);
 end;
 /
------------------------------------------------------------
 
+2)연습문제
 sabun 입력 : 3번의 sabun, name,deptno 
 deptno 가 10 : 인사부
 deptno 가 20 : 개발부
@@ -245,7 +246,6 @@ from company
 where sabun=3;
 
 sabun, name,deptno, 부서이름도 출력
-
 
 declare
 	vsabun number  := '&sabun';
@@ -270,34 +270,23 @@ begin
 
 	dbms_output.put_line(vsabun|| ',' || vname|| ',' ||vdeptno|| ',' || vdept);
 end;
+/
 
-
------------------------------------------------------------------
 members 테이블 이용 
 id를 입력 6
-6 제시카 500
-
-급여 500이상이면
--급여의 10%가 세금 100/0.1
-300
-5
-아니면 
-3
-
 6 제시카 500 50
-5 서현 200 6
 
---(vid, vname, vsalary) 안됨!!!
-
+급여 500이상이면 급여의 10%가 세금 
+급여 300이상이면 급여의 5%가 세금
+그외 급여의 3%가 세금 
 
 declare
- vid number := '&id';
- vname varchar2(10);
- vsalary number;
- tax number;
+vid number := '&id';
+vname varchar2(10);
+vsalary number;
+tax number;
 
 begin
-
 select id, name, salary
 into vid, vname, vsalary
 from members
@@ -314,9 +303,5 @@ end if;
 dbms_output.put_line(vid || ',' || vname || ',' || vsalary || ',' || tax); 
 
 end;
-
-😉😊❤
+/
 12,우기,600,60
-
-PL/SQL 처리가 정상적으로 완료되었습니다.
-3,수영,300,15
