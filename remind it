@@ -1,0 +1,22 @@
+04 
+SQL> select depart, avg(salary) 
+          2  from members;
+        select depart, avg(salary)
+               *
+        1행에 오류:
+        ORA-00937: 단일 그룹의 그룹 함수가 아닙니다 
+--그룹함수와 일반 컬럼을 같이 조회하는 경우에는 group by로 묶어주어야 함 ***
+
+
+where
+having --조건문 일반컬럼/ 함수
+급여가 500이상인 레코드를 대상으로/ 급여 평균이 2100이상인 레코드 부서별 조회  --<having
+        SLQ> select depart, avg(salary) from members
+        where salary >= 500
+        group by depart
+        having avg(salary) >= 2000;
+
+
+select pro.code, p_name, c_name, c_addr
+from producer pro, consumer con               --테이블 별칭 설정 as 절대 안됨***
+where pro.code = con.code;
