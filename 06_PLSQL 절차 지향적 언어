@@ -1,9 +1,8 @@
 ▶PLSQL Procedural Language 절차 지향적 언어
+▶set serveroutput on; --창 킬때마다 한번씩 써 줘야 함 --출력할 준비
+
+▶declare/begin/end
 1)
-set serveroutput on; --창 킬때마다 한번씩 써 줘야 함 --출력할 준비
-
-2)declare/begin/end
-
 declare
 	x number; --변수 선언
 begin
@@ -13,7 +12,7 @@ begin
 end;
 /	-sql디벨로퍼에서는 /안써도 됨
 
-3)
+2)
 declare
 	x number;
 	y number;
@@ -35,9 +34,9 @@ begin
 end;
 /
 
-4)select into : 결과가 한줄만 나올 때 사용 가능***
+▷select into : 결과가 레코드 한줄만 나올 때 사용 가능***
 declare
-	vname varchar2(12); --기존 컬럼타입과 똑같아야 함 (크기는 안똑같아도 됨)
+	vname varchar2(12); --가져올 테이블의 데이터의 기존 컬럼타입과 똑같아야 함 (크기는 안똑같아도 됨)
 	vposition varchar2(10);
 	vsalary number;
 begin
@@ -75,13 +74,12 @@ DEPART               AVG(SALARY) --결과 세줄 나옴 -> plsql 못 씀
 개발부                       500
 홍보부                    500100
 
-
 members의 부서별 급여 평균이 2000이상인 레코드 구하기
 
 select depart, avg(salary)
 from members
 group by depart
-having avg(salary) >= 2000; --조건으로 한줄 레코드 출력하면 가능함 --함수가 들어갈때 having
+having avg(salary) >= 2000; --조건으로 레코드 한줄만 출력한다면 가능함 --having함수가 들어갈때
 
 
 declare
@@ -97,9 +95,7 @@ begin
 	dbms_output.put_line(vdepart || ',' || vavg); --(vdepart , vavg); X
 end;
 /
-
-===============================
-
+---------------------------------------------------------------------------------------------
 ▶insert
 
  NO NAME      ADDR
@@ -129,7 +125,7 @@ begin
 	values(vno,vname,vaddr);
 end;
 
-3)code 입력받아서
+3)code 입력받아서***
 declare 
 	vno number := '&no'; --&다음에 아무거나 쓰면 됨
 	vname varchar2(10) := '&name';
@@ -148,8 +144,7 @@ begin
 	delete from consumer
 	where code = vcode;
 end;
-
-
+/
 
 5)code 입력받아 수정
 
@@ -176,16 +171,15 @@ Begin
 End;
 /
 
+--declare
 
 Begin
 	update consumer
-	set c_name = '&c_name' ,'&c_price --변수선언 없이 바로 입력 받음
+	set c_name = '&c_name' ,'&c_price --변수선언 없이 바로 입력 받을 수 있음***
 	where code='&code';
 End;
 /
-
-
-==========================================================
+-------------------------------------------------------------------------------------------
 
 ▶if문 사용하기
 
