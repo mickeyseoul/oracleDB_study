@@ -1,1 +1,328 @@
+▶PLSQL Procedural Language 절차 지향적 언어
+1)
+set serveroutput on; --창 킬때마다 한번씩 써 줘야 함 --출력할 준비
 
+2)declare/begin/end
+
+declare
+	x number; --변수 선언
+begin
+	x := 100;			--A:=B A에 B를 넣음
+	dbms_output.put_line('값=' || x);	--line은 출력과 엔터의 의미
+	dbms_output.put('값=' || x);		--출력 안됨
+end;
+/	-sql디벨로퍼에서는 /안써도 됨
+
+3)
+declare
+	x number;
+	y number;
+	z number;
+	name varchar2(10);
+	addr varchar2(10);
+begin
+	x:=10;
+	y:=20;
+	z:=x+y;
+	name:='김연아';
+	addr:='서울';
+	dbms_output.put('결과는 ' || (x+y) || ' 입니다.'); --()묶어 줘야 함
+	dbms_output.put('결과는 ' || z || ' 입니다.' || chr(10) ); --엔터: 연결해라 10 엔터의 아스키코드값
+	dbms_output.put('몫:' || floor(12/7) || ' 입니다.');
+	dbms_output.put('몫:' || round(12/7) || ' 입니다.');
+	dbms_output.put('나머지:' || mod(12,7) || ' 입니다.');
+	dbms_output.put_line('이름: ' || name || ' 주소: ' || addr); --line은 출력과 엔터의 의미
+end;
+/
+
+4)select into : 결과가 한줄만 나올 때 사용 가능***
+declare
+	vname varchar2(12); --기존 컬럼타입과 똑같아야 함 (크기는 안똑같아도 됨)
+	vposition varchar2(10);
+	vsalary number;
+begin
+	select name, position, salary
+	into vname, vposition, vsalary --기존 컬럼을 담을 변수가 필요함
+	from company
+	where sabun = 3; --결과 오직 한줄의 레코드를 위한 조건
+
+	dbms_output.put_line(vname || ',' || vposition || ',' || vsalary);
+end;
+/
+
+declare
+	vsalary number;
+	vavg number;
+begin
+	select max(salary),avg(salary) --한줄
+	into vsalary,vavg
+	from company;
+
+	dbms_output.put_line('최고급여:' || vsalary);
+	dbms_output.put_line('평균:' || vavg);
+end;
+/
+
+members의 부서별 급여 평균 구하기
+
+select depart, avg(salary)
+from members
+group by depart;
+
+DEPART               AVG(SALARY) --결과 세줄 나옴 -> plsql 못 씀
+-------------------- -----------
+영업부                514.285714
+개발부                       500
+홍보부                    500100
+
+
+members의 부서별 급여 평균이 2000이상인 레코드 구하기
+
+select depart, avg(salary)
+from members
+group by depart
+having avg(salary) >= 2000; --조건으로 한줄 레코드 출력하면 가능함 --함수가 들어갈때 having
+
+
+declare
+	vdepart varchar2(20);
+	vavg number; 
+begin
+	select depart, avg(salary)
+	into vdepart, vavg
+	from members
+	group by depart
+	having avg(salary) >= 2000;
+
+	dbms_output.put_line(vdepart || ',' || vavg); --(vdepart , vavg); X
+end;
+/
+
+===============================
+
+▶insert
+
+ NO NAME      ADDR
+--- --------- ------
+  1 찬성      대구
+  2 백현      강릉
+  3 택연      울산
+  4 수호      목포
+  5 웬디      서울
+
+1)spl문 사용
+declare --변수 선언 할 것이 없으면 지워도 됨
+	
+begin
+	insert into customer
+	values(5,'웬디','서울');
+end;
+
+2)변수
+declare 
+	vno number;
+	vname varchar2(10) := '슬기';
+	vaddr varchar2(10) := '부산';
+begin
+	vno := 6;
+	insert into customer
+	values(vno,vname,vaddr);
+end;
+
+3)code 입력받아서
+declare 
+	vno number := '&no'; --&다음에 아무거나 쓰면 됨
+	vname varchar2(10) := '&name';
+	vaddr varchar2(10) := '&addr';
+begin
+	insert into customer
+	values(vno,vname,vaddr);
+end;
+
+
+4)code 입력받아 삭제
+
+declare
+	vcode varchar2(10):= '&code';
+begin
+	delete from consumer
+	where code = vcode;
+end;
+
+
+
+5)code 입력받아 수정
+
+ODE                 C_NAME                  C_PRICE C_ADDR
+-------------------- -------------------- ---------- --------------------
+A05                  제니                       2500 광주
+A01                  전지현                     1100 서울
+A02                  김수현                     2100 부산
+A03                  아이유                     3100 제주
+A04                  태연                       3100 제주
+
+update consumer
+set c_name='조이', c_price=10
+where code='A01';
+
+Declare
+	vcode varchar2(5):= '&code';
+	vc_name varchar2(10):='&c_name';
+	vc_price number:='&c_price';
+Begin
+	update consumer
+	set c_name = vc_name ,c_price=vc_price
+	where code=vcode;
+End;
+/
+
+
+Begin
+	update consumer
+	set c_name = '&c_name' ,'&c_price --변수선언 없이 바로 입력 받음
+	where code='&code';
+End;
+/
+
+
+==========================================================
+
+▶if문 사용하기
+
+if 조건 then
+	처리할 문장1;
+end if;
+
+
+if 조건 then
+ 처리할 문장1;
+elsif 조건2 then --else if
+ 처리할 문장2;
+else
+ 처리할 문장3
+end if;
+
+
+declare
+	x number := 2;
+	result varchar2(15);
+begin
+	if x=1 then
+	  result := 'one';
+	elsif x=2 then
+	  result := 'two';
+	elsif x=3 then
+	   result :='그 밖의 수';
+	else
+	  result := '그 밖의 수';
+	end if;
+
+	dbms_output.put_line('result:' || result);
+end;
+/
+
+declare
+	x number := '&x';
+	result varchar2(15);
+begin
+	if x=1 then
+	  result := 'one';
+	elsif x=2 then
+	  result := 'two';
+	elsif x=3 then
+	   result :='그 밖의 수';
+	else
+	  result := '그 밖의 수';
+	end if;
+
+	dbms_output.put_line('result:' || result);
+end;
+/
+-----------------------------------------------------------
+
+sabun 입력 : 3번의 sabun, name,deptno 
+deptno 가 10 : 인사부
+deptno 가 20 : 개발부
+deptno 가 30 : 홍보부
+그 밖의 수 : 없는 부서
+
+select sabun, name,deptno
+from company
+where sabun=3;
+
+sabun, name,deptno, 부서이름도 출력
+
+
+declare
+	vsabun number  := '&sabun';
+	vname varchar2(12);
+	vdept varchar2(10) ;
+	vdeptno varchar2(10);
+begin
+	select sabun, name,deptno
+	into vsabun, vname,vdeptno
+	from company
+	where sabun=vsabun;
+
+	if vdeptno=10 then
+	 vdept := '인사부';
+	elsif vdeptno =20 then 
+	 vdept := '개발부';
+	elsif vdeptno =30 then
+	 vdept := '홍보부';
+	else
+	 vdept := '없는 부서';
+	end if;
+
+	dbms_output.put_line(vsabun|| ',' || vname|| ',' ||vdeptno|| ',' || vdept);
+end;
+
+
+-----------------------------------------------------------------
+members 테이블 이용 
+id를 입력 6
+6 제시카 500
+
+급여 500이상이면
+-급여의 10%가 세금 100/0.1
+300
+5
+아니면 
+3
+
+6 제시카 500 50
+5 서현 200 6
+
+--(vid, vname, vsalary) 안됨!!!
+
+
+declare
+ vid number := '&id';
+ vname varchar2(10);
+ vsalary number;
+ tax number;
+
+begin
+
+select id, name, salary
+into vid, vname, vsalary
+from members
+where id = vid;
+
+if vsalary>=500 then
+ tax:=vsalary*0.1;
+elsif vsalary>=300 then
+ tax:=vsalary*0.05;
+else
+ tax:=vsalary*0.03;
+end if;
+
+dbms_output.put_line(vid || ',' || vname || ',' || vsalary || ',' || tax); 
+
+end;
+
+😉😊❤
+12,우기,600,60
+
+PL/SQL 처리가 정상적으로 완료되었습니다.
+3,수영,300,15
