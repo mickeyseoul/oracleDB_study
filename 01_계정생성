@@ -46,35 +46,5 @@
     사용자가 삭제되었습니다.
 
 
-▶
->>DB는 대소문자 구분 안함
-
->>복사: 커서 드래그 후 엔터
->>붙여넣기: 복사후 우클릭
-
-▶
-DDL 데이터 정의어 Data Definition Language --auto commit됨
-create
-alter
-rename
-drop
-
-DML 데이터 조작어 Data Manipulation Language --commit 필수 rollback 가능
-select
-insert
-update
-delete
-
-DCL 데이터 제어어 Data Control Language
-grant
-
-▶
-제약조건 constraint
-primary key
-not null
-unique
-check 		check(gender in('남자','여자') 남자 여자만 인서트 가능
-foreign key
-default
 
 
