@@ -97,6 +97,38 @@ begin
 	dbms_output.put_line(vdepart || ',' || vavg); --(vdepart , vavg); X
 end;
 /
+
+▶테이블 데이터타입을 모를때
+
+1)%type
+declare
+	vid members.id%type;
+	vname members.name%type;
+	vsalary members.salary%type;
+begin
+	select id, name, salary
+	into vid, vname, vsalary
+	from members
+	where id = 3; 
+
+	dbms_output.put_line(vid||','||vname||','||vsalary);
+end;
+/
+
+2)%rowtype
+declare
+	vmember members%rowtype; --한줄(한레코드)
+begin
+	select *
+	into vmember
+	from members
+	where id = 3; 
+
+	dbms_output.put_line(vmember.id||','||vmember.name||','||vmember.gender); 
+	--필요한 것만 하나씩 하나씩 꺼내 쓸 수 있음
+	--dbms_output.put_line(vmember); X
+end;
+/
 ---------------------------------------------------------------------------------------------
 ▶insert
 
@@ -181,127 +213,5 @@ Begin
 	where code='&code';
 End;
 /
--------------------------------------------------------------------------------------------
-▶if문 사용하기
-
-if 조건 then
-	처리할 문장1;
-end if;
 
 
-if 조건 then
- 처리할 문장1;
-elsif 조건2 then 	--else if
- 처리할 문장2;
-else
- 처리할 문장3;
-end if;
-
-1)
-declare
-	x number := 2;
-	result varchar2(15);
-begin
-	if x=1 then
-	  result := 'one';
-	elsif x=2 then
-	  result := 'two';
-	elsif x=3 then
-	   result :='그 밖의 수';
-	else
-	  result := '그 밖의 수';
-	end if;
-
-	dbms_output.put_line('result:' || result);
-end;
-/
-
-declare
-	x number := '&x';
-	result varchar2(15);
-begin
-	if x=1 then
-	  result := 'one';
-	elsif x=2 then
-	  result := 'two';
-	elsif x=3 then
-	   result :='그 밖의 수';
-	else
-	  result := '그 밖의 수';
-	end if;
-
-	dbms_output.put_line('result:' || result);
-end;
-/
-
-2)연습문제
-sabun 입력 : 3번의 sabun, name,deptno 
-deptno 가 10 : 인사부
-deptno 가 20 : 개발부
-deptno 가 30 : 홍보부
-그 밖의 수 : 없는 부서
-
-select sabun, name,deptno
-from company
-where sabun=3;
-
-sabun, name,deptno, 부서이름도 출력
-
-declare
-	vsabun number  := '&sabun';
-	vname varchar2(12);
-	vdept varchar2(10) ;
-	vdeptno varchar2(10);
-begin
-	select sabun, name,deptno
-	into vsabun, vname,vdeptno
-	from company
-	where sabun=vsabun;
-
-	if vdeptno=10 then
-	 vdept := '인사부';
-	elsif vdeptno =20 then 
-	 vdept := '개발부';
-	elsif vdeptno =30 then
-	 vdept := '홍보부';
-	else
-	 vdept := '없는 부서';
-	end if;
-
-	dbms_output.put_line(vsabun|| ',' || vname|| ',' ||vdeptno|| ',' || vdept);
-end;
-/
-
-members 테이블 이용 
-id를 입력 6
-6 제시카 500 50
-
-급여 500이상이면 급여의 10%가 세금 
-급여 300이상이면 급여의 5%가 세금
-그외 급여의 3%가 세금 
-
-declare
-vid number := '&id';
-vname varchar2(10);
-vsalary number;
-tax number;
-
-begin
-select id, name, salary
-into vid, vname, vsalary
-from members
-where id = vid;
-
-if vsalary>=500 then
- tax:=vsalary*0.1;
-elsif vsalary>=300 then
- tax:=vsalary*0.05;
-else
- tax:=vsalary*0.03;
-end if;
-
-dbms_output.put_line(vid || ',' || vname || ',' || vsalary || ',' || tax); 
-
-end;
-/
-12,우기,600,60
