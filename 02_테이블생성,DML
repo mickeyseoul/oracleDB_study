@@ -19,6 +19,29 @@ email varchar2(20)
      EMAIL                                              VARCHAR2(20)
  
  
+ ▶테이블명 이름 바꾸기
+rename 원래테이블 to 새테이블;
+
+rollback; 안됨
+
+    SQL> select * from tab; --테이블 전체 목록 가져오기
+
+    TNAME      TABTYPE         CLUSTERID
+    ---------- -------------- ----------
+    COMPANY    TABLE
+    MEMBERS    TABLE
+
+
+▶테이블 카피
+create table members2 as --members를 전체 카피
+select * from members;
+
+create table members3 as
+select * from members where id>5;
+
+create table members4 as
+select * from members where gender='여자';
+-------------------------------------------------------------------------------------------------------------------- 
 ▶insert
 insert into 테이블이름(칼럼1,칼럼2,....) values(값1,값2....);
 
