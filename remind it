@@ -20,3 +20,18 @@ having --조건문 일반컬럼/ 함수
 select pro.code, p_name, c_name, c_addr
 from producer pro, consumer con               --테이블 별칭 설정 as 절대 안됨***
 where pro.code = con.code;
+
+
+06
+--declare
+
+Begin
+	update consumer
+	set c_name = '&c_name' ,'&c_price --변수선언 없이 바로 입력 받을 수 있음***
+	where code='&code';
+End;
+/
+
+
+
+
