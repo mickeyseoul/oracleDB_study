@@ -194,7 +194,7 @@ if 조건 then
 elsif 조건2 then 	--else if
  처리할 문장2;
 else
- 처리할 문장3
+ 처리할 문장3;
 end if;
 
 1)
