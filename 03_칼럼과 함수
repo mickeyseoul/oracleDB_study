@@ -125,26 +125,28 @@ dual:함수(계산)을 임시로 실행할 때 사용하는 테이블
            1+1
     ----------
              2
-
+-----------------------------------------------------------------------------------------------------------
+▶날짜 함수
 ▷sysdate/systime
+1)sysdate
+년/월/일 --시/분/초 정보도 들어가 있지만 보이지 않음
     SQL> select sysdate from dual;
 
     SYSDATE
     --------
-    22/06/14 --시/분/초 정보도 들어가 있지만 보이지 않음
+    22/06/14 
 
-
+2)systimestamp
+년/월/일 시:분:초
     SQL> select systimestamp from dual;
 
     SYSTIMESTAMP
     ---------------------------------------------------------------------------
     22/06/14 11:41:37.483000 +09:00
 
-
-▷
-to_date(문자열): 문자열 -> 날짜
-to_char(날짜): 날짜 -> 문자열
-
+▷to_char/to_date
+to_char(날짜,format): 날짜 -> 문자열   --cf)to_date(문자열,format): 문자열 -> 날짜
+1)
     SQL> select to_char(sysdate,'yyyy_mm/dd hh:MI:ss') from dual;
 
     TO_CHAR(SYSDATE,'YYYY_MM/DDHH:MI:SS')
@@ -156,8 +158,8 @@ to_char(날짜): 날짜 -> 문자열
     --------------------------------------
     2022_06/14 11:06:54
     
-    
-select name, to_char(sysdate,'yyyy') - to_char(birth,'yyyy') as age from members; --나이 뽑아내기
+2) 나이 뽑아내기   
+select name, to_char(sysdate,'yyyy') - to_char(birth,'yyyy') as age from members; 
 X select name, to_char(sysdate,'yy') - to_char(birth,'yy') as age from members; --음수가 나옴 -- as 'age'는 임시 칼럼
 
 select name, to_char(sysdate,'yyyy') - to_char(birth,'yyyy') as age from members --
@@ -167,12 +169,9 @@ where age>=40; --age 컬럼은 임시이기 때문에 안됨***
     
 생일이 6월인 레코드 조회
 select name, to_char(birth,'MM') from members
-where to_char(birth,'MM') = '6';
+where to_char(birth,'MM') = '6'; --'06'가능
 
-생일이 6월인 레코드 조회
-select name, to_char(birth,'mm') from members
-where to_char(birth,'mm') = '06';
-
+3)요일 알아내기
     SQL> select to_char(sysdate,'d') from dual;
 
     TO
@@ -191,11 +190,13 @@ where to_char(birth,'mm') = '06';
     ------------------------
     화요일
 
-    내 생일 요일
-    select to_char('1993-2-22','day') from dual;
-
+내 생일 요일
+select to_char('1993-2-22','day') from dual;
+--------------------------------------------------------------------------------------------------------------------
+▶숫자 함수
 ▷mod 나머지 구하기
-    SQL> select mod(13,4) from dual;
+
+    SQL> select mod(13,4) from dual; --13을 4로 
 
     MOD(13,4)
     ----------
@@ -207,8 +208,9 @@ where mod(to_char(birth, 'MM'),2) = 0;
     
 
 ▷round/ceil/floor
-round 반올림 함수
-소수점 밑 5이상이면 반올림
+1) round 반올림 함수
+round(n) : 소수점 밑 5이상이면 반올림
+round(n,i) : 소수점 기준 i+1번째에서 반올림한 결과를 반환
 
 select round(789.54321), round(0.987), round(0.12345,3) from dual; --네번째 자리까지 보고 세번째 자리까지 출력
 
@@ -216,17 +218,15 @@ ROUND(789.54321) ROUND(0.987) ROUND(0.12345,3)
 ---------------- ------------ ----------------
              790            1             .123
 
-ceil
+2) ceil
 select ceil(123.1234)from dual; --뭐라도 있으면 무조건 올리기
 
 CEIL(123.1234)
 --------------
            124
 
-
-floor
+3) floor
 select floor(123.1234)from dual; --무조건 버리기
-
 
         SQL> select avg(salary) from members;
 
@@ -240,26 +240,22 @@ select floor(123.1234)from dual; --무조건 버리기
         --------------------
                     77369.23
 
-
-
-
-
-▶문자열
-
+----------------------------------------------------------------------------------------------------------------
+▶문자 함수
 ▷lower/upper
-자바 String tolowerCase() toUppercase()
+cf)자바 String tolowerCase() toUppercase()
 
+1)
         SQL> select lower('bANana'), upper('bANaNa') from dual;
 
         LOWER('BANAN UPPER('BANAN
         ------------ ------------
         banana       BANANA
 
-
+2)
 update members
 set email = 'ccc@DAum.net' --SQL문장만 대소문자 구분 안하는 것이지 데이터 값은 구분 함***
 where id = 4;
-
 
 select * from members
 where lower(email) like '%daum%'; --찾을 때만 잠시 소문자로 바꿈
@@ -267,15 +263,15 @@ where lower(email) like '%daum%'; --찾을 때만 잠시 소문자로 바꿈
 select * from members
 where lower(email) like lower('%DAum%');
 
-
 ▷length 문자 수/lengthb 바이트 수
+1)
         SQL> select length('카페 라떼'), length('cafe latte'), lengthb('카페 라떼'), lengthb('cafe latte') from dual;
 
         LENGTH('카페라떼') LENGTH('CAFELATTE') LENGTHB('카페라떼') LENGTHB('CAFELATTE')
         ------------------ ------------------- ------------------- --------------------
                          5                  10                  13                   10
 
-
+2)
 select * from members
 where name like '___';
 
