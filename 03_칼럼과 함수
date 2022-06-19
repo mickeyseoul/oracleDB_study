@@ -160,7 +160,7 @@ to_char(날짜): 날짜 -> 문자열
 select name, to_char(sysdate,'yyyy') - to_char(birth,'yyyy') as age from members; --나이 뽑아내기
 X select name, to_char(sysdate,'yy') - to_char(birth,'yy') as age from members; --음수가 나옴 -- as 'age'는 임시 칼럼
 
-select name, to_char(sysdate,'yyyy') - to_char(birth,'yyyy') as age from members <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+select name, to_char(sysdate,'yyyy') - to_char(birth,'yyyy') as age from members --
 where to_char(sysdate,'yyyy') - to_char(birth,'yyyy')>=40;
 Xselect name, to_char(sysdate,'yyyy') - to_char(birth,'yyyy') as age from members  
 where age>=40; --age 컬럼은 임시이기 때문에 안됨***
