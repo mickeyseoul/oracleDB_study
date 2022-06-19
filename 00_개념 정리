@@ -47,6 +47,9 @@ revoke
 primary key
 not null
 unique
-check 		--check(gender in('남자','여자') 남자 여자만 인서트 가능
-foreign key
 default
+check 		--check(gender in('남자','여자') 남자 여자만 인서트 가능
+foreign key --references 테이블이름(컬럼이름) on delete cascade/set null
+
+
+
