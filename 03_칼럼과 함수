@@ -145,7 +145,7 @@ dual:함수(계산)을 임시로 실행할 때 사용하는 테이블
     22/06/14 11:41:37.483000 +09:00
 
 ▷to_char/to_date
-to_char(날짜,format): 날짜 -> 문자열   --cf)to_date(문자열,format): 문자열 -> 날짜
+to_char(날짜,format): 날짜 -> 문자열 
 1)
     SQL> select to_char(sysdate,'yyyy_mm/dd hh:MI:ss') from dual;
 
@@ -189,9 +189,13 @@ where to_char(birth,'MM') = '6'; --'06'가능
     TO_CHAR(SYSDATE,'DAY')
     ------------------------
     화요일
-
-내 생일 요일
-select to_char('1993-2-22','day') from dual;
+    
+2) to_date(문자열,format): 문자열 -> 날짜
+내 생일 요일 구하기
+select to_char(to_date('1993-2-22'),'day') from dual;
+    TO_CHAR(TO_DATE('1993-2-
+    ------------------------
+    월요일
 --------------------------------------------------------------------------------------------------------------------
 ▶숫자 함수
 ▷mod 나머지 구하기
