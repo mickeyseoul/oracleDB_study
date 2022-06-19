@@ -1,3 +1,9 @@
+03
+select name, to_char(sysdate,'yyyy') - to_char(birth,'yyyy') as age from members --
+where to_char(sysdate,'yyyy') - to_char(birth,'yyyy')>=40;
+Xselect name, to_char(sysdate,'yyyy') - to_char(birth,'yyyy') as age from members  
+where age>=40; --age 컬럼은 임시이기 때문에 안됨***
+
 04 
 SQL> select depart, avg(salary) 
           2  from members;
