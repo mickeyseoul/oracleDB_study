@@ -1,0 +1,144 @@
+▶함수function(메서드) --return
+                                                            자바
+                                                            public void setName(String name){
+                                                             this.name = name;
+                                                            }
+
+                                                            public int getAge(){
+                                                             return age;
+                                                            }
+
+▷함수 정의/호출
+1)함수 호출
+select test() from dual; --()없어도 호출 됨
+
+    TEST()
+----------
+       300
+
+2)함수 정의
+drop table test;                    --테이블과 함수 이름이 같아도 함수 생성 안됨(테이블도 마찬가지)
+--drop funtion test;
+
+create or replace function test     --X; --test 없으면 만들고 있으면 변경하라
+return number as                    --number 리턴
+	x number;                         --함수에서는 변수선언시 declare 안
+	y number;
+begin
+	x:= 100;
+	y:= 200;
+	return x+y;
+end;
+/
+
+3)연습문제
+book테이블의 레코드 갯수 호출하는 함수
+select test2() from dual;
+
+create or replace function test2
+return number as
+	vcount number;
+begin
+	select count(*) --전체 레코드 갯수
+	into vcount
+	from book;
+	return vcount;
+end;
+/
+
+▷인자값 있는 함수
+1)
+호출
+select test3(10,20) from dual;
+
+정의
+drop table test3;
+create or replace function test3(a number, b number)
+  return number as
+begin
+ return a+b;
+end;
+/
+
+2)
+호출
+select id, name, salary, tax(salary) from members;
+
+정의
+create or replace function tax(a members.salary%type)
+return number as
+
+begin
+  if a>=1000 then return a*0.2;
+  elsif a > 500 then return a*0.1;
+  else return a*0.05;
+  end if;
+end;
+/
+
+        ID NAME                     SALARY TAX(SALARY)
+---------- -------------------- ---------- -----------
+         1 제시카                      100          20
+         4 효연                        800         160
+        11 태연                        600         120
+        12 우기                        600         120
+  
+
+연습문제)
+호출
+select sabun, name, deptno, deptname(10) from company;
+
+10 개발부
+20 홍보부
+30 인사부
+
+정의
+create or replace function deptname(vdeptno company.deptno%type)
+return varchar2 as      --return (company.deptno%type) as 안됨
+	vdeptname varchar2(10);
+begin
+	--if vdeptno = 10 then
+	--	return  '개발부' ; 
+	--elsif vdeptno = 20 then
+	--	return  '홍보부' ; 
+	--elsif vdeptno = 30 then
+	--	return  '인사부' ; 
+	--end if;
+
+	case(vdeptno)
+		when 10 then vdeptname := '개발부';
+		when 20 then vdeptname := '홍보부';
+		when 30 then vdeptname := '인사부';
+	end case;
+	return vdeptname;
+end;
+/
+-------------------------------------------------------------------------------------------
+▶프로시저 procedure --리턴 안함 !=함수
+1)호출
+execute ptest(3); --리턴값이 없으니 select쓰지 않음
+--exec ptest(3);
+
+2)정의
+create or replace procedure ptest(no number)
+is 		--as도 가능 --리턴 안함 !=함수
+변수 선언
+
+begin
+	update members
+	set salary = salary*1.1
+	where id = no;
+end;
+/
+
+연습문제)
+execute pdelete(8);
+
+create or replace procedure pdelete(vno number)
+is
+
+begin
+delete from customer
+where no = vno;
+
+end;
