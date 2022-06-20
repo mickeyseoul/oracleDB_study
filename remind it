@@ -2,6 +2,19 @@
 ▷그룹함수
 :하나 이상의 행을 그룹으로 묶어 연산하여 총합(sum), 평균(avg) 등 하나의 결과로 나타냄
 
+급여가 500이상인 레코드를 대상으로/ 부서별 급여 평균이 2100이상인 레코드를/ 부서 오름차순으로 조회
+        SLQ> select depart, avg(salary) from members
+        where salary >= 500
+        group by depart
+        having avg(salary) >= 2000
+        order by depart asc;
+
+▶group by
+일반 컬럼1, 그룹함수1, 그룹함수2 ... 	--일반컬럼, 그룹함수 함께 있을땐 group by 필수***
+group by 일반컬럼1;
+
+일반 컬럼1, 일반컬럼2, 그룹함수1, 그룹함수2 ...
+group by 일반컬럼1, 일반컬럼2; 		   --일반컬럼 수 맞춰야 함
 
 select name, to_char(sysdate,'yyyy') - to_char(birth,'yyyy') as age from members --
 where to_char(sysdate,'yyyy') - to_char(birth,'yyyy')>=40;
