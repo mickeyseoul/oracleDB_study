@@ -1,3 +1,19 @@
+07
+▷레코드 여러줄 출력하여 변수에 담을 때*** 그냥 조회 select랑은 다름!!!
+select into 레코드가 한줄일 때만 가능
+
+for i in 반복할 대상 loop 
+
+--declare
+begin
+	for i in (select id, name, salary from members) loop --한 레코드씩 뽑아서 변수 i에 넣어서 출력
+	dbms_output.put_line(i.id||','||i.name||','||i.salary);
+	end loop;
+end;
+/
+
+
+
 03
 ▷그룹함수
 :하나 이상의 행을 그룹으로 묶어 연산하여 총합(sum), 평균(avg) 등 하나의 결과로 나타냄
