@@ -43,6 +43,7 @@ alter table consumer rename column c_code to code;
 select pro.code, p_name, c_name, c_addr
 from producer pro, consumer con               --테이블 별칭 설정 as 절대 안됨***
 where pro.code = con.code;
+
 ▷inner join        
 select pro.code, p_name, c_name, c_addr
 from producer pro inner join consumer con     --inner join 교집합 조인
@@ -62,9 +63,9 @@ select pro.code, p_name, c_name, c_addr
 from producer pro full outer join consumer con --일치하지 않는 것도 양쪽 나옴
 on pro.code = con.code;        
 
-▷natural join --양쪽 테이블에 공통되는 모든 컬럼을 조건으로 교집합 조인 --on X***
+▷natural join --컬럼 이름이 똑같을때 교집합 조인
 select code, p_name, c_name, c_price
-from producer natural join consumer;
+from producer natural join consumer; --on X***
 
 결과물을 임시테이블로 저장
 drop table imsi;
