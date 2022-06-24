@@ -1,4 +1,5 @@
 ▶외래키(자식키)
+:자식키에서 부모키를 참고하여 없는 값은 사용하지 못하게 함
 
 >>자식테이블
 	 NO TITLE                AUTHOR    PUBLISHER       DAY         SELL_NO
