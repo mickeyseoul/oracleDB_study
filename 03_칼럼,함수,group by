@@ -184,6 +184,12 @@ group by 일반컬럼1, 일반컬럼2; 		   --일반컬럼 수 맞춰야 함
         SQL> select gender, depart, count(*) 인원수 --일반 컬럼 2개
           2  from members
           3  group by gender, depart;
+          
+                      GENDER       DEPART                 COUNT(*)
+            ------------ -------------------- ----------
+            남           연구부                        2
+            여           연구부                        1
+            여           홍보부                        2
 
 
 부서별 급여가 500이상인 레코드/ 급여 평균조회
